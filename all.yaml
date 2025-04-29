@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: all-language-nodejs
+  name: all-language-nodejs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: all-language-nodejs
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: all-language-nodejs
+    spec:
+      containers:
+      - image: kennethfoo24/all-language-nodejs:99a4008558473edc109d179be150f792cf3d9ba7
+        name: all-language-nodejs
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: all-language-nodejs
+  name: all-language-nodejs-lb
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app: all-language-nodejs
+  type: LoadBalancer
+status:
+  loadBalancer: {}
