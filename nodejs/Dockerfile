@@ -6,11 +6,11 @@ EXPOSE 3000
 WORKDIR /app
 
 # install packages
-COPY package.json ./
+COPY nodejs/package.json ./
 
 RUN npm install
 
 # copy app
-COPY ./ ./
+COPY nodejs/ ./
 
 CMD node index.js
