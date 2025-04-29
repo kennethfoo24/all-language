@@ -6,7 +6,7 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
-const OTHER_SERVICE_URL = process.env.PYTHON_SERVICE_URL;
+const PYTHON_SERVICE_URL = process.env.PYTHON_SERVICE_URL;
 
 
 // Respond "Hello world!" on /
@@ -14,7 +14,7 @@ app.get('/nodejs', async (req, res) => {
   console.log("This is a nodeJS log");
   try {
     // Call the other service by its k8s Service DNS name
-    const otherRes = await axios.get(OTHER_SERVICE_URL, {
+    const otherRes = await axios.get(PYTHON_SERVICE_URL, {
       // you can pass headers, tracing tags, etc. here
       headers: {
         'X-Request-ID': req.header('X-Request-ID') || '',
