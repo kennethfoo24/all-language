@@ -6,8 +6,7 @@ import requests
 app = Flask(__name__)
 
 OTHER_SERVICE_URL = os.getenv(
-    'OTHER_SERVICE_URL',
-    'http://my-nodejs-service:3000/nodejs'
+    'OTHER_SERVICE_URL'
 )
 
 @app.route('/python')
