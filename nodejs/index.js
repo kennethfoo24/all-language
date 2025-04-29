@@ -6,7 +6,7 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
-const OTHER_SERVICE_URL = process.env.OTHER_SERVICE_URL || 'http://my-k8s-service:3000/api/endpoint';
+const OTHER_SERVICE_URL = process.env.PYTHON_SERVICE_URL;
 
 
 // Respond "Hello world!" on /
