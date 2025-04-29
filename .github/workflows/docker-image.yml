@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DOCKER_REPOSITORY: kennethfoo24 # name of Docker Hub ID
-      IMAGE_NAME: all-language
+      IMAGE_NAME: all-language-nodejs
     steps:
     - uses: actions/checkout@v4
     
@@ -27,6 +27,6 @@ jobs:
         registry: docker.io
         dockerfile: nodejs/Dockerfile
         tags: ${{ github.sha }}
-        buildArgs: 'DD_GIT_REPOSITORY_URL=github.com/kennethfoo24/all-language,DD_GIT_COMMIT_SHA=$(git rev-parse HEAD)'        
+        buildArgs: 'DD_GIT_REPOSITORY_URL=github.com/kennethfoo24/all-language-nodejs,DD_GIT_COMMIT_SHA=$(git rev-parse HEAD)'        
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
