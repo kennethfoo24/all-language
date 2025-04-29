@@ -1,0 +1,34 @@
+name: Docker Image CI Backend Python
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_REPOSITORY: kennethfoo24    # your Docker Hub username
+      IMAGE_NAME: all-language-python    # the Python image name
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
+
+      - name: Build & push Docker image
+        uses: mr-smithers-excellent/docker-build-push@v6
+        with:
+          image: ${{ env.DOCKER_REPOSITORY }}/${{ env.IMAGE_NAME }}
+          registry: docker.io
+          dockerfile: python/Dockerfile
+          tags: ${{ github.sha }}
+          buildArgs: 'DD_GIT_REPOSITORY_URL=github.com/kennethfoo24/all-language-python,DD_GIT_COMMIT_SHA=$(git rev-parse HEAD)'
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
