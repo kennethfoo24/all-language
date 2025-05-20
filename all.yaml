@@ -102,7 +102,7 @@ spec:
         app: all-language-java
     spec:
       containers:
-      - image: kennethfoo24/all-language-java:0f2a1b4c3d7e4f5a8b6c9e2f3d4e5f6a7b8c9d0e
+      - image: kennethfoo24/all-language-java:latest
         name: all-language-java
         imagePullPolicy: IfNotPresent
         ports:
