@@ -16,7 +16,7 @@ spec:
         app: all-language-nodejs
     spec:
       containers:
-      - image: kennethfoo24/all-language-nodejs:ccb6e53597664136b0d0bed232ac8a989c8127c4
+      - image: kennethfoo24/all-language-nodejs:latest
         name: all-language-nodejs
         imagePullPolicy: IfNotPresent
         ports:
@@ -60,7 +60,7 @@ spec:
         app: all-language-python
     spec:
       containers:
-      - image: kennethfoo24/all-language-python:05387b4d12805f33850b9684364e73de292b2c9c
+      - image: kennethfoo24/all-language-python:latest
         name: all-language-python
         imagePullPolicy: IfNotPresent
         ports:

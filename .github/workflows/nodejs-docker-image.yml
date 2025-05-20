@@ -26,7 +26,7 @@ jobs:
         image: ${{ env.DOCKER_REPOSITORY }}/${{ env.IMAGE_NAME }}
         registry: docker.io
         dockerfile: nodejs/Dockerfile
-        tags: ${{ github.sha }}
+        tags: ${{ github.sha }}, latest
         buildArgs: 'DD_GIT_REPOSITORY_URL=github.com/kennethfoo24/all-language-nodejs,DD_GIT_COMMIT_SHA=$(git rev-parse HEAD)'        
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
