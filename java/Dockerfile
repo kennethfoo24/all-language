@@ -6,15 +6,11 @@
 # RUN ./mvnw package -DskipTests 
 # CMD java -javaagent:dd-java-agent.jar -jar target/spring-boot-0.0.1-SNAPSHOT.jar
 
-FROM openjdk:17
-WORKDIR /workspace
-COPY java/app/ ./
-RUN mvn -B clean package
-
-FROM openjdk:17
+FROM openjdk:17-jdk-slim
 WORKDIR /app
-COPY --from=build /workspace/target/spring-boot-0.0.1-SNAPSHOT.jar app.jar
+
+# Copy the JAR produced by the *previous* Maven step
+COPY java/app/target/spring-boot-0.0.1-SNAPSHOT.jar app.jar
+
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","/app/app.jar"]
-
-
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
