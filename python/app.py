@@ -11,10 +11,10 @@ JAVA_SERVICE_URL = os.getenv('JAVA_SERVICE_URL', 'http://localhost:8080')
 
 @app.route('/python')
 def hello():
-    app.logger.info(f'[/python] Calling Java service at {JAVA_SERVICE_URL}/java-set-error')
+    app.logger.info(f'[/python] Calling Java service at {JAVA_SERVICE_URL}/java')
     try:
         resp = requests.get(
-            f"{JAVA_SERVICE_URL}/java-set-error",
+            f"{JAVA_SERVICE_URL}/java",
             headers={'X-Request-ID': request.headers.get('X-Request-ID', '')},
             timeout=5
         )
