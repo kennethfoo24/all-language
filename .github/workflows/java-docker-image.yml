@@ -1,0 +1,43 @@
+name: Docker Image CI Backend Java
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_REPOSITORY: kennethfoo24      # your Docker Hub username
+      IMAGE_NAME: all-language-java        # the Java image name
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ------ Build the Java application ------
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'          # Eclipse Temurin (Adoptium)
+          java-version: '17'               # 17 —match your code
+          cache: 'maven'                   # change to 'gradle' if needed
+
+      - name: Build with Maven
+        run: mvn -B clean package          # replace with "./gradlew build" for Gradle
+
+      # ------ Build & push the Docker image to Docker Hub ------
+      - name: Build & push Docker image
+        uses: mr-smithers-excellent/docker-build-push@v6
+        with:
+          image: ${{ env.DOCKER_REPOSITORY }}/${{ env.IMAGE_NAME }}
+          registry: docker.io
+          dockerfile: java/Dockerfile      # adjust if your Dockerfile lives elsewhere
+          tags: ${{ github.sha }},latest
+          buildArgs: |
+            DD_GIT_REPOSITORY_URL=github.com/kennethfoo24/all-language-java
+            DD_GIT_COMMIT_SHA=${{ github.sha }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
