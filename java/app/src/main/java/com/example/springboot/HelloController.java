@@ -8,16 +8,16 @@ import java.lang.Thread;
 // import the LocalDate class to add the date as a tag
 import java.time.LocalDate; 
 
-// Datadog tracer
-import io.opentracing.util.GlobalTracer;
-import io.opentracing.Span;
-import io.opentracing.Scope;
-import io.opentracing.tag.Tags;
-import io.opentracing.log.Fields;
-import io.opentracing.Tracer;
-import java.util.Collections;
-import datadog.trace.api.Trace;
-import datadog.trace.api.DDTags;
+// // Datadog tracer
+// import io.opentracing.util.GlobalTracer;
+// import io.opentracing.Span;
+// import io.opentracing.Scope;
+// import io.opentracing.tag.Tags;
+// import io.opentracing.log.Fields;
+// import io.opentracing.Tracer;
+// import java.util.Collections;
+// import datadog.trace.api.Trace;
+// import datadog.trace.api.DDTags;
 
 // Making a class based on RestController
 @RestController
@@ -43,25 +43,36 @@ public class HelloController {
 		return "Adding a tag";
 	}
 
-	// Setting an error to the current span when a given exception happens
-	@GetMapping(value="/java-set-error")
+	// // Setting an error to the current span when a given exception happens
+	// @GetMapping(value="/java-set-error")
+	// public String setError() {
+	// 	// Getting the span
+	// 	final Span span = GlobalTracer.get().activeSpan();
+	// 	if (span != null) {
+	// 		// creating an error by accessing non existing element in list
+	// 		try{
+	// 			int[] smallArray = {1};
+	// 			System.out.println(smallArray[1]);
+	// 		} catch (Exception ex){
+	// 			// Since the error is catched, the http status code will be 200 and the span will have status Ok
+	// 			// So we use the following line to force the error on the span here.
+	// 			span.setTag(Tags.ERROR, true);
+	// 			span.log(Collections.singletonMap(Fields.ERROR_OBJECT, ex));
+	// 		}
+	// 	}
+	// 	return "Setting an error.";
+	// }
+
+	@GetMapping("/java-set-error")
 	public String setError() {
-		// Getting the span
-		final Span span = GlobalTracer.get().activeSpan();
-		if (span != null) {
-			// creating an error by accessing non existing element in list
-			try{
-				int[] smallArray = {1};
-				System.out.println(smallArray[1]);
-			} catch (Exception ex){
-				// Since the error is catched, the http status code will be 200 and the span will have status Ok
-				// So we use the following line to force the error on the span here.
-				span.setTag(Tags.ERROR, true);
-				span.log(Collections.singletonMap(Fields.ERROR_OBJECT, ex));
-			}
-		}
+		// just trigger the sample exception to prove the endpoint works
+		try {
+			int[] smallArray = {1};
+			System.out.println(smallArray[1]);
+		} catch (Exception ignored) { }
 		return "Setting an error.";
 	}
+
 
 	// Following we use a function that we will annotate to trace it when it's called.
 	// This is a waiting function.
