@@ -67,7 +67,7 @@ spec:
         - containerPort: 5000
         env:
         - name: JAVA_SERVICE_URL
-          value: "http://all-language-java-lb:8080/java-set-error"
+          value: "http://all-language-java-lb:8080"
 ---
 apiVersion: v1
 kind: Service
