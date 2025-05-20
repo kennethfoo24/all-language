@@ -23,26 +23,6 @@ import java.time.LocalDate;
 @RestController
 public class HelloController {
 
-	// Respond "Hello world!" on /
-	@GetMapping(value="/")
-	public String index() {
-		return "Hello World!";
-	}
-
-	// Addind a tag to the current span
-	@GetMapping(value="/add-tag")
-	public String addTag() {
-		// Getting the span
-		final Span span = GlobalTracer.get().activeSpan();
-		if (span != null) {
-			// Create a date object
-			LocalDate myDate = LocalDate.now(); 
-			// Adding the date as tag to add extra information, but this is not required for spans in general since the tracer will add the timestamp to all traces.
-			span.setTag("date", myDate.toString());
-		}
-		return "Adding a tag";
-	}
-
 	// // Setting an error to the current span when a given exception happens
 	// @GetMapping(value="/java-set-error")
 	// public String setError() {
@@ -63,7 +43,7 @@ public class HelloController {
 	// 	return "Setting an error.";
 	// }
 
-	@GetMapping("/java-set-error")
+	@GetMapping("/java")
 	public String setError() {
 		// just trigger the sample exception to prove the endpoint works
 		try {
@@ -74,46 +54,46 @@ public class HelloController {
 	}
 
 
-	// Following we use a function that we will annotate to trace it when it's called.
-	// This is a waiting function.
-	@Trace(operationName = "manual.span", resourceName = "Waiting")
-	public void Waiting() {
-		try{
-			Thread.sleep(1000);
-		} catch (Exception e){
-			return;
-		}
-	}
+	// // Following we use a function that we will annotate to trace it when it's called.
+	// // This is a waiting function.
+	// @Trace(operationName = "manual.span", resourceName = "Waiting")
+	// public void Waiting() {
+	// 	try{
+	// 		Thread.sleep(1000);
+	// 	} catch (Exception e){
+	// 		return;
+	// 	}
+	// }
 
-	// We call the previous function and therefore create a span with trace annotation.
-	@GetMapping(value="/trace-annotation")
-	public String traceAnnotation() {
-		Waiting();
-		return "Creating a span with trace annotations";
-	}
+	// // We call the previous function and therefore create a span with trace annotation.
+	// @GetMapping(value="/trace-annotation")
+	// public String traceAnnotation() {
+	// 	Waiting();
+	// 	return "Creating a span with trace annotations";
+	// }
 
-	// Manually creating a new span
-	@GetMapping(value="/manual-span")
-	public String manualSpan() {
-		Tracer tracer = GlobalTracer.get();
-		// Setting the spans service, resource and operation name
-		Span span = tracer.buildSpan("manual.span")
-            .withTag(DDTags.SERVICE_NAME, "java-manual")
-            .withTag(DDTags.RESOURCE_NAME, "Manual")
-            .start();
+	// // Manually creating a new span
+	// @GetMapping(value="/manual-span")
+	// public String manualSpan() {
+	// 	Tracer tracer = GlobalTracer.get();
+	// 	// Setting the spans service, resource and operation name
+	// 	Span span = tracer.buildSpan("manual.span")
+ //            .withTag(DDTags.SERVICE_NAME, "java-manual")
+ //            .withTag(DDTags.RESOURCE_NAME, "Manual")
+ //            .start();
 
-			try (Scope scope = tracer.activateSpan(span)) {
-				// Alternatively, set tags after creation
-				span.setTag("state", "crafted");
+	// 		try (Scope scope = tracer.activateSpan(span)) {
+	// 			// Alternatively, set tags after creation
+	// 			span.setTag("state", "crafted");
 	
-				try{
-					Thread.sleep(1000);
-				} catch (Exception e){}
+	// 			try{
+	// 				Thread.sleep(1000);
+	// 			} catch (Exception e){}
 	
-			}
+	// 		}
 
-			span.finish();
+	// 		span.finish();
 
-		return "Manually creating a span";
-	}
+	// 	return "Manually creating a span";
+	// }
 }
