@@ -26,7 +26,7 @@ jobs:
           cache: 'maven'                   # change to 'gradle' if needed
 
       - name: Build with Maven
-        run: mvn -B clean package          # replace with "./gradlew build" for Gradle
+        run: mvn -B -f java/app/pom.xml clean package              
 
       # ------ Build & push the Docker image to Docker Hub ------
       - name: Build & push Docker image
