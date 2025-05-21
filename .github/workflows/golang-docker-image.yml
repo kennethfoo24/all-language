@@ -1,0 +1,36 @@
+name: Docker Image CI Backend Go
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_REPOSITORY: kennethfoo24         # your Docker Hub user/org
+      IMAGE_NAME: all-language-golang             # image name for the Go service
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version-file: go.mod           # ← reads the "go X.Y" line automatically
+        cache: true                       # speeds up repeated builds
+
+    #Build & push the Docker image
+    - name: Build & push Docker image
+      uses: mr-smithers-excellent/docker-build-push@v6
+      with:
+        image: ${{ env.DOCKER_REPOSITORY }}/${{ env.IMAGE_NAME }}
+        registry: docker.io
+        dockerfile: golang/Dockerfile         # change if your Dockerfile is elsewhere
+        tags: ${{ github.sha }},latest
+        buildArgs: 'DD_GIT_REPOSITORY_URL=github.com/kennethfoo24/all-language-golang,DD_GIT_COMMIT_SHA=$(git rev-parse HEAD)'
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
