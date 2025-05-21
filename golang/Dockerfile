@@ -3,8 +3,8 @@ FROM golang:1.19
 WORKDIR /app
 
 # Download Go modules
-COPY go.mod .
-COPY go.sum .
+COPY golang/go.mod .
+COPY golang/go.sum .
 RUN go mod download
 
 # Build
