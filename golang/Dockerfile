@@ -24,7 +24,7 @@ RUN go install github.com/datadog/orchestrion@v0.1.0
 WORKDIR /src
 
 # 2) copy module files and let orchestrion pin itself
-COPY golang/* .
+COPY golang/ .
 RUN orchestrion pin && go mod download       # <— pin happens *inside* the image
 
 # 3) copy source and build through orchestrion
