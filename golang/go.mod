@@ -1,6 +1,6 @@
 module go-hello-world
 
-go 1.19
+go 1.18
 
 require (
 	gopkg.in/DataDog/dd-trace-go.v1 v1.43.1
