@@ -19,7 +19,7 @@
 FROM golang:1.18 AS build
 
 # 1) install the orchestrion CLI
-RUN go install github.com/datadog/orchestrion@v0.8.1
+RUN go install github.com/datadog/orchestrion@v0.8.0
 
 WORKDIR /src
 
