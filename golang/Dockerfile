@@ -16,7 +16,7 @@
 
 ####################  build stage  ####################
 # Orchestrion supports the two most-recent Go releases → use 1.22
-FROM golang:1.22-bullseye-slim AS build
+FROM golang:1.22 AS build
 
 # 1) install the orchestrion CLI
 RUN go install github.com/datadog/orchestrion@v0.8.0
