@@ -25,7 +25,7 @@ WORKDIR /src
 
 # 2) copy module files and let orchestrion pin itself
 COPY golang/ .
-RUN orchestrion pin && go mod download       # <— pin happens *inside* the image
+RUN go mod download       # <— pin happens *inside* the image
 
 # 3) copy source and build through orchestrion
 RUN orchestrion go build -ldflags="-s -w" -o /app/server ./main.go
