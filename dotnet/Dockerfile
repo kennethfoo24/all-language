@@ -5,7 +5,7 @@ WORKDIR /App
 LABEL "com.datadoghq.ad.logs"='[{"source": "csharp", "service": "simple-dotnet"}]'
 
 # Copy everything
-COPY . ./
+COPY dotnet/ ./
 
 # Restore as distinct layers
 RUN dotnet restore
