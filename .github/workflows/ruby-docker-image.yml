@@ -20,7 +20,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.1'             # match the version in your Gemfile
+          ruby-version: '3.4.4'             # match the version in your Gemfile
           cache: 'bundle'                 # cache installed gems
 
       - name: Build & push Docker image
