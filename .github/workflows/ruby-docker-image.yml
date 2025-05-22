@@ -1,0 +1,35 @@
+name: Docker Image CI Backend Ruby
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_REPOSITORY: kennethfoo24    # your Docker Hub username
+      IMAGE_NAME: all-language-ruby      # the Ruby image name
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.1'             # match the version in your Gemfile
+          cache: 'bundle'                 # cache installed gems
+
+      - name: Build & push Docker image
+        uses: mr-smithers-excellent/docker-build-push@v6
+        with:
+          image: ${{ env.DOCKER_REPOSITORY }}/${{ env.IMAGE_NAME }}
+          registry: docker.io
+          dockerfile: ruby/Dockerfile          # adjust if your Dockerfile lives elsewhere
+          tags: ${{ github.sha }},latest
+          buildArgs: 'DD_GIT_REPOSITORY_URL=github.com/kennethfoo24/all-language-ruby,DD_GIT_COMMIT_SHA=$(git rev-parse HEAD)'
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
