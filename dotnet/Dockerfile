@@ -24,8 +24,8 @@ ENV CORECLR_PROFILER_PATH=/opt/datadog/Datadog.Trace.ClrProfiler.Native.so
 ENV DD_INTEGRATIONS=/opt/datadog/integrations.json
 ENV DD_DOTNET_TRACER_HOME=/opt/datadog
 
-ARG VERSION
-ARG ARCH
+ARG VERSION=3.16.0
+ARG ARCH=amd64
 RUN wget https://github.com/DataDog/dd-trace-dotnet/releases/download/v${VERSION}/datadog-dotnet-apm_${VERSION}_${ARCH}.deb && dpkg -i ./datadog-dotnet-apm_${VERSION}_${ARCH}.deb
 
 # Build runtime image
