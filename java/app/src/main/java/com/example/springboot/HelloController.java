@@ -1,7 +1,10 @@
 package com.example.springboot;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 // import thread to sleed when creating new spans
 import java.lang.Thread;
@@ -23,6 +26,23 @@ import java.time.LocalDate;
 @RestController
 public class HelloController {
 
+	// Read from env GOLANG_SERVICE_URL (e.g. http://all-language-golang-lb:80)
+    	@Value("${GOLANG_SERVICE_URL}")
+    	private String golangServiceUrl;
+
+    	private final RestTemplate restTemplate = new RestTemplate();
+	
+	@GetMapping("/java")
+	public ResponseEntity<String> callService() {
+		String url = golangServiceUrl + "/golang";
+		// forward the GET and return whatever the Go service returns
+        	ResponseEntity<String> resp = restTemplate.getForEntity(url, String.class);
+        	return ResponseEntity
+                	.status(resp.getStatusCode())
+                	.body(resp.getBody());
+		}
+	}
+
 	// // Setting an error to the current span when a given exception happens
 	// @GetMapping(value="/java-set-error")
 	// public String setError() {
@@ -42,17 +62,6 @@ public class HelloController {
 	// 	}
 	// 	return "Setting an error.";
 	// }
-
-	@GetMapping("/java")
-	public String setError() {
-		// just trigger the sample exception to prove the endpoint works
-		try {
-			int[] smallArray = {1};
-			System.out.println(smallArray[1]);
-		} catch (Exception ignored) { }
-		return "Setting an error.";
-	}
-
 
 	// // Following we use a function that we will annotate to trace it when it's called.
 	// // This is a waiting function.
