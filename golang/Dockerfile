@@ -4,8 +4,9 @@ WORKDIR /app
 
 # Download Go modules
 COPY golang/ .
-RUN go install github.com/datadog/orchestrion@latest
+RUN go install github.com/DataDog/orchestrion@latest
 RUN go mod download
+RUN orchestrion pin
 
 # Build
 RUN orchestrion go build -o hello-world
