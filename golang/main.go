@@ -48,8 +48,31 @@ func internalWork(w http.ResponseWriter, r *http.Request) {
     w.Write([]byte("Internal work done"))
 }
 
-func say_hello(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Hello World!"))
+func helloService(w http.ResponseWriter, r *http.Request) {
+    // 1) Figure out the Ruby service URL (with default)
+    rubyURL := os.Getenv("RUBY_SERVICE_URL")
+    if rubyURL == "" {
+        rubyURL = "http://localhost:4567"
+    }
+
+    // 2) Call /ruby
+    endpoint := rubyURL + "/ruby"
+    client := &http.Client{Timeout: 3 * time.Second}
+    resp, err := client.Get(endpoint)
+    if err != nil {
+        http.Error(w, "failed to call Ruby service: "+err.Error(), http.StatusBadGateway)
+        return
+    }
+    defer resp.Body.Close()
+
+    // 3) Propagate the Ruby status code
+    w.WriteHeader(resp.StatusCode)
+    // 4) Write our own greeting first
+    w.Write([]byte("Hello World from Golang!\n"))
+    // 5) Then stream the Ruby response body
+    if _, err := io.Copy(w, resp.Body); err != nil {
+        log.Printf("error copying ruby response: %v", err)
+    }
 }
 
 func main() {
@@ -60,7 +83,7 @@ func main() {
 
     mux := http.NewServeMux()
     mux.HandleFunc("/", sayHello)
-    mux.HandleFunc("/golang", say_hello)
+    mux.HandleFunc("/golang", helloService)
     mux.HandleFunc("/internal-work", internalWork)
 
     log.Printf("listening on :%s", port)
