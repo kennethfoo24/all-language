@@ -200,10 +200,53 @@ metadata:
   name: all-language-ruby-lb
 spec:
   ports:
-  - port: 4567
+  - port: 80
     protocol: TCP
     targetPort: 4567
   selector:
     app: all-language-ruby
-  type: ClusterIP
+  type: LoadBalancer
+status:
+  loadBalancer: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: all-language-dotnet
+  name: all-language-dotnet
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: all-language-dotnet
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: all-language-dotnet
+    spec:
+      containers:
+      - image: kennethfoo24/all-language-dotnet:latest
+        name: all-language-dotnet
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 4567
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: all-language-dotnet
+  name: all-language-dotnet-lb
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 5555
+  selector:
+    app: all-language-dotnet
+  type: LoadBalancer
+status:
+  loadBalancer: {}
 

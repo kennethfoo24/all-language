@@ -1,0 +1,45 @@
+name: Docker Image CI Backend DOTNET
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_REPOSITORY: kennethfoo24    # your Docker Hub username
+      IMAGE_NAME: all-language-dotnet    # the .NET image name
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '9.0'          # match your TargetFramework
+
+      - name: Restore dependencies
+        run: dotnet restore ./dotnet-app.csproj
+
+      - name: Build in Release
+        run: dotnet build ./dotnet-app.csproj --configuration Release --no-restore
+
+      - name: Publish for production
+        run: dotnet publish ./dotnet-app.csproj --configuration Release --output ./publish --no-build
+
+      - name: Build & push Docker image
+        uses: mr-smithers-excellent/docker-build-push@v6
+        with:
+          image: ${{ env.DOCKER_REPOSITORY }}/${{ env.IMAGE_NAME }}
+          registry: docker.io
+          dockerfile: Dockerfile           # adjust if your Dockerfile lives elsewhere
+          tags: ${{ github.sha }},latest
+          buildArgs: |
+            DD_GIT_REPOSITORY_URL=github.com/kennethfoo24/all-language-dotnet
+            DD_GIT_COMMIT_SHA=$(git rev-parse HEAD)
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
