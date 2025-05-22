@@ -18,13 +18,14 @@
 # Orchestrion supports the two most-recent Go releases → use 1.22
 FROM golang:1.18 AS build
 
-# 1) install the orchestrion CLI
-RUN go install github.com/datadog/orchestrion@v0.1.0
-
 WORKDIR /src
 
 # 2) copy module files and let orchestrion pin itself
 COPY golang/ .
+
+# 1) install the orchestrion CLI
+RUN go install github.com/datadog/orchestrion@v0.1.0
+
 RUN go mod download       # <— pin happens *inside* the image
 
 # 3) copy source and build through orchestrion
