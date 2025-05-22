@@ -41,35 +41,38 @@ var log = loggerConfiguration.CreateLogger();
 // Respond "Hello world!" on /
 app.MapGet("/", () => "Hello World!");
 
-// 1) /dotnet: greet + call another service
-app.MapGet("/dotnet", async () =>
+// 1) /dotnet: greeting + upstream service call
+app.MapGet("/dotnet", async (HttpContext context) =>
 {
-    // Read the upstream service URL from A_SERVICE_URL
     var serviceUrl = Environment.GetEnvironmentVariable("A_SERVICE_URL");
     if (string.IsNullOrEmpty(serviceUrl))
     {
-        return Results.Problem("A_SERVICE_URL is not set", statusCode: 500);
+        context.Response.StatusCode = 500;
+        await context.Response.WriteAsync("A_SERVICE_URL is not set");
+        return;
     }
 
-    // Call the upstream service
     using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(5) };
-    HttpResponseMessage upstreamResponse;
+    HttpResponseMessage upstream;
     try
     {
-        upstreamResponse = await client.GetAsync(serviceUrl);
+        upstream = await client.GetAsync(serviceUrl);
     }
     catch (Exception ex)
     {
-        return Results.Problem($"Failed to call upstream service: {ex.Message}", statusCode: 502);
+        context.Response.StatusCode = 502;
+        await context.Response.WriteAsync($"Failed to call upstream service: {ex.Message}");
+        return;
     }
 
-    var upstreamBody = await upstreamResponse.Content.ReadAsStringAsync();
+    var upstreamBody = await upstream.Content.ReadAsStringAsync();
 
-    // Combine your greeting with whatever came back
-    var combined = $"Hello World from .NET!\n{upstreamBody}";
-    return Results.Content(combined, "text/plain", upstreamResponse.StatusCode);
+    context.Response.StatusCode = (int)upstream.StatusCode;
+    context.Response.ContentType = "text/plain";
+
+    await context.Response.WriteAsync("Hello World from .NET!\n");
+    await context.Response.WriteAsync(upstreamBody);
 });
-
 
 
 app.Run();
