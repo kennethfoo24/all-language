@@ -144,7 +144,7 @@ spec:
         app: all-language-golang
     spec:
       containers:
-      - image: kennethfoo24/all-language-golang:latest
+      - image: kennethfoo24/all-language-golang:0e19a97efe7bc521d3de4e3f1e95caadfdf695a4
         name: all-language-golang
         imagePullPolicy: IfNotPresent
         ports:
@@ -227,7 +227,7 @@ spec:
         app: all-language-dotnet
     spec:
       containers:
-      - image: kennethfoo24/all-language-dotnet:2e57dd6192f7469898c185cc50321186839bc7ca
+      - image: kennethfoo24/all-language-dotnet:0e19a97efe7bc521d3de4e3f1e95caadfdf695a4
         name: all-language-dotnet
         imagePullPolicy: IfNotPresent
         ports:
@@ -245,6 +245,6 @@ spec:
     protocol: TCP
     targetPort: 5555
   selector:
-    app: all-language-golang
+    app: all-language-dotnet
   type: ClusterIP
 
