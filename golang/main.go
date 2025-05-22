@@ -60,7 +60,7 @@ func main() {
 
     mux := http.NewServeMux()
     mux.HandleFunc("/", sayHello)
-    mux.HandleFunc("/hello", say_hello)
+    mux.HandleFunc("/golang", say_hello)
     mux.HandleFunc("/internal-work", internalWork)
 
     log.Printf("listening on :%s", port)
