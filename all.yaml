@@ -186,7 +186,7 @@ spec:
         app: all-language-ruby
     spec:
       containers:
-      - image: kennethfoo24/all-language-ruby:9accdc7592585e701b5fcc0619f73ec8661bcf83
+      - image: kennethfoo24/all-language-ruby:f8c5feb5581866c06edd03102e63fe3c6abc5bdf
         name: all-language-ruby
         imagePullPolicy: IfNotPresent
         ports:
@@ -227,7 +227,7 @@ spec:
         app: all-language-dotnet
     spec:
       containers:
-      - image: kennethfoo24/all-language-dotnet:latest
+      - image: kennethfoo24/all-language-dotnet:f8c5feb5581866c06edd03102e63fe3c6abc5bdf
         name: all-language-dotnet
         imagePullPolicy: IfNotPresent
         ports:

@@ -1,8 +1,9 @@
-﻿// Datadog tracer
-using Datadog.Trace;
-
-// Adding System to add the date as tag in a span
+﻿// Adding System to add the date as tag in a span
 using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 
 using Serilog;
 using Serilog.Context;
@@ -40,70 +41,35 @@ var log = loggerConfiguration.CreateLogger();
 // Respond "Hello world!" on /
 app.MapGet("/", () => "Hello World!");
 
-// Endpoint where we add a tag
-app.MapGet("/add-tag", () =>
+// 1) /dotnet: greet + call another service
+app.MapGet("/dotnet", async () =>
 {
+    // Read the upstream service URL from A_SERVICE_URL
+    var serviceUrl = Environment.GetEnvironmentVariable("A_SERVICE_URL");
+    if (string.IsNullOrEmpty(serviceUrl))
+    {
+        return Results.Problem("A_SERVICE_URL is not set", statusCode: 500);
+    }
 
-  log.Information("Adding a tag");
-
-  // Getting the active span
-  var scope = Tracer.Instance.ActiveScope;
-
-  if (scope != null)
-  {
-    // Adding a custom span tag for use in the Datadog UI. 
-    // The tag added here is the current date. The UI already allows scoping by date, this is just for example purposes.
-
-    var currentDateTime = DateTime.Today.ToString();
-
-    scope.Span.SetTag("date", currentDateTime);
-    log.Information("Date tag has been set to current time {CurrentTime}", currentDateTime);
-  }
-
-  return "Here we add a tag";
-});
-
-// Endpoint where we throw an exception
-app.MapGet("/exception", () =>
-{
-  // Getting the active span
-  var scope = Tracer.Instance.ActiveScope;
-
-  if (scope != null)
-  {
-    // Throwing an exception by dividing by 0
-    int numer = 1;
-    int denom = 0;
-    int result;
+    // Call the upstream service
+    using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(5) };
+    HttpResponseMessage upstreamResponse;
     try
     {
-      result = numer / denom;
+        upstreamResponse = await client.GetAsync(serviceUrl);
     }
-    catch (Exception e)
+    catch (Exception ex)
     {
-      log.Error(e, "Exception has been thrown!");
-      scope.Span.SetException(e);
+        return Results.Problem($"Failed to call upstream service: {ex.Message}", statusCode: 502);
     }
-  }
 
-  return "Throwing an exeption!";
+    var upstreamBody = await upstreamResponse.Content.ReadAsStringAsync();
+
+    // Combine your greeting with whatever came back
+    var combined = $"Hello World from .NET!\n{upstreamBody}";
+    return Results.Content(combined, "text/plain", upstreamResponse.StatusCode);
 });
 
-// Endpoint where we add a custom span
-app.MapGet("/manual-span", () =>
-{
-  log.Information("Adding a custom span");
-  using (var parentScope = Tracer.Instance.StartActive("manual.sortorders"))
-  {
-    parentScope.Span.ResourceName = "Parent Resource";
-    using (var childScope = Tracer.Instance.StartActive("manual.sortorders.child"))
-    {
-      // Nest using statements around the code to trace
-      childScope.Span.ResourceName = "Child Resource";
-    }
-  }
 
-  return "Adding a span manually";
-});
 
 app.Run();
