@@ -40,6 +40,7 @@ datadog:
             python: "2"
             js: "5"
             php: "1"
+            ruby: "2"
           ddTraceConfigs:
             - name: "DD_PROFILING_ENABLED"  ## profiling is enabled for all services in this namespace
               value: "true"
