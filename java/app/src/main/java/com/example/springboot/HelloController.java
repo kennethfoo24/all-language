@@ -41,7 +41,7 @@ public class HelloController {
                 	.status(resp.getStatusCode())
                 	.body(resp.getBody());
 		}
-	}
+	
 
 	// // Setting an error to the current span when a given exception happens
 	// @GetMapping(value="/java-set-error")
