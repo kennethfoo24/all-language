@@ -1,4 +1,4 @@
-FROM ruby:3.4.0
+FROM ruby:3.3.8
 
 RUN apt-get update && apt-get install -y build-essential && rm -rf /var/lib/apt/lists/*
 
