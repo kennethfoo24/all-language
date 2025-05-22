@@ -1,4 +1,4 @@
-name: Docker Image CI Backend DOTNET
+name: Docker Image CI Backend .NET
 
 on:
   push:
@@ -23,13 +23,13 @@ jobs:
           dotnet-version: '9.0'          # match your TargetFramework
 
       - name: Restore dependencies
-        run: dotnet restore ./dotnet-app.csproj
+        run: dotnet restore ./dotnet/dotnet-app.csproj
 
       - name: Build in Release
-        run: dotnet build ./dotnet-app.csproj --configuration Release --no-restore
+        run: dotnet build ./dotnet/dotnet-app.csproj --configuration Release --no-restore
 
       - name: Publish for production
-        run: dotnet publish ./dotnet-app.csproj --configuration Release --output ./publish --no-build
+        run: dotnet publish ./dotnet/dotnet-app.csproj --configuration Release --output ./publish --no-build
 
       - name: Build & push Docker image
         uses: mr-smithers-excellent/docker-build-push@v6
