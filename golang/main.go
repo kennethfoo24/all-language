@@ -49,29 +49,29 @@ func internalWork(w http.ResponseWriter, r *http.Request) {
 }
 
 func helloService(w http.ResponseWriter, r *http.Request) {
-    // 1) Figure out the Ruby service URL (with default)
-    rubyURL := os.Getenv("RUBY_SERVICE_URL")
-    if rubyURL == "" {
-        rubyURL = "http://localhost:4567"
+    // 1) Figure out the dotnet service URL (with default)
+    dotnetURL := os.Getenv("DOTNET_SERVICE_URL")
+    if dotnetURL == "" {
+        dotnetURL = "http://localhost:4567"
     }
 
-    // 2) Call /ruby
-    endpoint := rubyURL + "/ruby"
+    // 2) Call /dotnet
+    endpoint := dotnetURL + "/dotnet"
     client := &http.Client{Timeout: 3 * time.Second}
     resp, err := client.Get(endpoint)
     if err != nil {
-        http.Error(w, "failed to call Ruby service: "+err.Error(), http.StatusBadGateway)
+        http.Error(w, "failed to call dotnet service: "+err.Error(), http.StatusBadGateway)
         return
     }
     defer resp.Body.Close()
 
-    // 3) Propagate the Ruby status code
+    // 3) Propagate the dotnet status code
     w.WriteHeader(resp.StatusCode)
     // 4) Write our own greeting first
     w.Write([]byte("Hello World from Golang!\n"))
-    // 5) Then stream the Ruby response body
+    // 5) Then stream the dotnet response body
     if _, err := io.Copy(w, resp.Body); err != nil {
-        log.Printf("error copying ruby response: %v", err)
+        log.Printf("error copying dotnet response: %v", err)
     }
 }
 

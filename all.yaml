@@ -150,8 +150,8 @@ spec:
         ports:
         - containerPort: 8000
         env:
-        - name: RUBY_SERVICE_URL
-          value: "http://all-language-ruby-lb:4567"
+        - name: DOTNET_SERVICE_URL
+          value: "http://all-language-dotnet-lb:5555"
 ---
 apiVersion: v1
 kind: Service
@@ -227,11 +227,11 @@ spec:
         app: all-language-dotnet
     spec:
       containers:
-      - image: kennethfoo24/all-language-dotnet:f8c5feb5581866c06edd03102e63fe3c6abc5bdf
+      - image: kennethfoo24/all-language-dotnet:2e57dd6192f7469898c185cc50321186839bc7ca
         name: all-language-dotnet
         imagePullPolicy: IfNotPresent
         ports:
-        - containerPort: 4567
+        - containerPort: 5555
 ---
 apiVersion: v1
 kind: Service
@@ -241,12 +241,10 @@ metadata:
   name: all-language-dotnet-lb
 spec:
   ports:
-  - port: 80
+  - port: 5555
     protocol: TCP
     targetPort: 5555
   selector:
-    app: all-language-dotnet
-  type: LoadBalancer
-status:
-  loadBalancer: {}
+    app: all-language-golang
+  type: ClusterIP
 
