@@ -13,4 +13,4 @@ RUN gem install bundler && \
 
 EXPOSE 4567
 
-CMD ["bundle", "exec", "puma", "-b", "tcp://0.0.0.0:4567", "app.rb"]
+CMD ["ruby", "app.rb", "-o", "0.0.0.0", "-p", "4567"]

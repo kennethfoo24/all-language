@@ -186,7 +186,7 @@ spec:
         app: all-language-ruby
     spec:
       containers:
-      - image: kennethfoo24/all-language-ruby:latest
+      - image: kennethfoo24/all-language-ruby:9926716cb6d779b089cbcf5e237bc647be72f8cc
         name: all-language-ruby
         imagePullPolicy: IfNotPresent
         ports:
