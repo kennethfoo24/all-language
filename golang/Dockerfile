@@ -16,7 +16,7 @@
 
 ####################  build stage  ####################
 # Orchestrion supports the two most-recent Go releases → use 1.22
-FROM golang:1.18 AS build
+FROM golang:1.19 AS build
 
 WORKDIR /src
 
