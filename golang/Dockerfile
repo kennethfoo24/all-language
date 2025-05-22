@@ -24,7 +24,7 @@ WORKDIR /src
 COPY golang/ .
 
 # 1) install the orchestrion CLI
-RUN go install github.com/datadog/orchestrion@v0.1.0
+RUN go install github.com/datadog/orchestrion@v0.8
 
 RUN go mod download       # <— pin happens *inside* the image
 
