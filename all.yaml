@@ -167,7 +167,7 @@ spec:
   selector:
     app: all-language-golang
   type: ClusterIP
-
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
