@@ -24,6 +24,8 @@ spec:
         env:
         - name: PYTHON_SERVICE_URL
           value: "http://all-language-python-lb:5000/python"
+        - name: DD_LOGS_INJECTION
+          value: "true"
 ---
 apiVersion: v1
 kind: Service
