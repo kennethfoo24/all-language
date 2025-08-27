@@ -229,7 +229,7 @@ spec:
         app: all-language-dotnet
     spec:
       containers:
-      - image: kennethfoo24/all-language-dotnet:0e19a97efe7bc521d3de4e3f1e95caadfdf695a4
+      - image: kennethfoo24/all-language-dotnet:latest
         name: all-language-dotnet
         imagePullPolicy: IfNotPresent
         ports:
