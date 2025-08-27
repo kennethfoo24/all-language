@@ -5,8 +5,6 @@ NodeJS > Python > Java > Golang > Dotnet > Ruby > PHP
 
 ## Usage
 
-Install my-project with npm
-
 ```bash
 kubectl create namespace datadog
 ```
