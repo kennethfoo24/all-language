@@ -146,7 +146,7 @@ spec:
         app: all-language-golang
     spec:
       containers:
-      - image: kennethfoo24/all-language-golang:0e19a97efe7bc521d3de4e3f1e95caadfdf695a4
+      - image: kennethfoo24/all-language-golang:latest
         name: all-language-golang
         imagePullPolicy: IfNotPresent
         ports:
