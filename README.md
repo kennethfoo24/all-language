@@ -35,6 +35,9 @@ helm upgrade datadog datadog/datadog -n datadog -f values.yaml
 k apply -f all.yaml 
 ```
 ```bash
+k get svc
+```
+```bash
 curl http://<LOAD_BALANCER_IP>/nodejs
 ```
     
