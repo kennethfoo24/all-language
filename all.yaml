@@ -207,7 +207,7 @@ spec:
     targetPort: 4567
   selector:
     app: all-language-ruby
-  type: LoadBalancer
+  type: ClusterIP
 status:
   loadBalancer: {}
 ---
@@ -234,6 +234,9 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5555
+        env:
+        - name: RUBY_SERVICE_URL
+          value: "http://all-language-ruby-lb/ruby"
 ---
 apiVersion: v1
 kind: Service
