@@ -44,11 +44,11 @@ app.MapGet("/", () => "Hello World!");
 // 1) /dotnet: greeting + upstream service call
 app.MapGet("/dotnet", async (HttpContext context) =>
 {
-    var serviceUrl = Environment.GetEnvironmentVariable("A_SERVICE_URL");
+    var serviceUrl = Environment.GetEnvironmentVariable("RUBY_SERVICE_URL");
     if (string.IsNullOrEmpty(serviceUrl))
     {
         context.Response.StatusCode = 500;
-        await context.Response.WriteAsync("A_SERVICE_URL is not set");
+        await context.Response.WriteAsync("RUBY_SERVICE_URL is not set");
         return;
     }
 
