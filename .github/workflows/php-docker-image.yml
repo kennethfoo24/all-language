@@ -25,8 +25,6 @@ jobs:
           dockerfile: php/Dockerfile     # Dockerfile path
           tags: ${{ github.sha }}, latest
           # Use Actions context so the values resolve correctly
-          buildArgs: |
-            DD_GIT_REPOSITORY_URL=${{ github.repository }}
-            DD_GIT_COMMIT_SHA=${{ github.sha }}
+          buildArgs: 'DD_GIT_REPOSITORY_URL=github.com/kennethfoo24/all-language-php,DD_GIT_COMMIT_SHA=$(git rev-parse HEAD)'  
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
