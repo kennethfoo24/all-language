@@ -252,4 +252,43 @@ spec:
   selector:
     app: all-language-dotnet
   type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: all-language-php
+  name: all-language-php
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: all-language-php
+  template:
+    metadata:
+      labels:
+        app: all-language-php
+    spec:
+      containers:
+        - name: all-language-php
+          image: kennethfoo24/all-language-php:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: all-language-php
+  name: all-language-php-lb
+spec:
+  type: ClusterIP
+  selector:
+    app: all-language-php
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+
 
