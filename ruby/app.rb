@@ -7,9 +7,7 @@ require 'uri'
 
 # /ruby now chains to the PHP service's /php endpoint via the Service ClusterIP.
 get '/ruby' do
-  host = ENV['ALL_LANGUAGE_PHP_SERVICE_HOST'] || ENV['PHP_SERVICE_HOST'] || 'all-language-php-lb'
-  port = ENV['ALL_LANGUAGE_PHP_SERVICE_PORT'] || ENV['PHP_SERVICE_PORT'] || '80'
-  target = "http://#{host}:#{port}/php"
+  target = "http://all-language-php-lb:80/php"
 
   uri = URI.parse(target)
   begin
@@ -25,9 +23,7 @@ end
 
 # Keep a direct probe route if you still want one:
 get '/php' do
-  host = ENV['ALL_LANGUAGE_PHP_SERVICE_HOST'] || ENV['PHP_SERVICE_HOST'] || 'all-language-php'
-  port = ENV['ALL_LANGUAGE_PHP_SERVICE_PORT'] || ENV['PHP_SERVICE_PORT'] || '80'
-  target = "http://#{host}:#{port}/"
+  target = "http://all-language-php-lb:80/php"
   uri = URI.parse(target)
   begin
     res = Net::HTTP.get_response(uri)
