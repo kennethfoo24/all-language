@@ -22,7 +22,6 @@ jobs:
         with:
           image: ${{ env.DOCKER_REPOSITORY }}/${{ env.IMAGE_NAME }}
           registry: docker.io
-          directory: all-language/php                 # Build context (folder)
           dockerfile: php/Dockerfile     # Dockerfile path
           tags: ${{ github.sha }}, latest
           # Use Actions context so the values resolve correctly
