@@ -188,7 +188,7 @@ spec:
         app: all-language-ruby
     spec:
       containers:
-      - image: kennethfoo24/all-language-ruby:f8c5feb5581866c06edd03102e63fe3c6abc5bdf
+      - image: kennethfoo24/all-language-ruby:latest
         name: all-language-ruby
         imagePullPolicy: IfNotPresent
         ports:
@@ -236,7 +236,7 @@ spec:
         - containerPort: 5555
         env:
         - name: RUBY_SERVICE_URL
-          value: "http://all-language-ruby-lb/ruby"
+          value: "http://all-language-ruby-lb:80/ruby"
 ---
 apiVersion: v1
 kind: Service
