@@ -1,38 +1,25 @@
 # app.rb
 require 'sinatra'
-require "sinatra/reloader" if development?
 require 'net/http'
 require 'uri'
 
+PHP_URL = URI('http://all-language-php-lb:80/php')
 
-# /ruby now chains to the PHP service's /php endpoint via the Service ClusterIP.
+def http_get(uri)
+  Net::HTTP.start(uri.host, uri.port) { |http| http.get(uri.request_uri) }
+rescue => e
+  e # return the exception so we can format a 502
+end
+
 get '/ruby' do
-  target = "http://all-language-php-lb:80/php"
+  res = http_get(PHP_URL)
 
-  uri = URI.parse(target)
-  begin
-    res = Net::HTTP.get_response(uri)
+  if res.is_a?(Net::HTTPResponse)
     status res.code.to_i
-    headers 'X-Upstream' => 'ruby->php', 'X-PHP-Target' => target
-    body "Ruby /ruby -> PHP /php\nPHP said: #{res.body}\n"
-  rescue => e
+    headers 'X-Upstream' => 'ruby->php', 'X-PHP-Target' => PHP_URL.to_s
+    "Ruby /ruby -> PHP /php\nPHP said: #{res.body}\n"
+  else
     status 502
-    body "Ruby failed to reach PHP /php at #{target}: #{e.class} - #{e.message}\n"
+    "Ruby failed to reach PHP /php at #{PHP_URL}: #{res.class} - #{res.message}\n"
   end
 end
-
-# Keep a direct probe route if you still want one:
-get '/php' do
-  target = "http://all-language-php-lb:80/php"
-  uri = URI.parse(target)
-  begin
-    res = Net::HTTP.get_response(uri)
-    status res.code.to_i
-    headers 'X-Upstream' => "ruby->php", 'X-PHP-Target' => target
-    body "Ruby called PHP at #{target}\nPHP said: #{res.body}\n"
-  rescue => e
-    status 502
-    body "Ruby failed to reach PHP at #{target}: #{e.class} - #{e.message}\n"
-  end
-end
-
