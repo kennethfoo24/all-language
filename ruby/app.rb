@@ -2,14 +2,15 @@
 require 'sinatra'
 require 'net/http'
 require 'uri'
+require 'datadog'
 require 'datadog/auto_instrument'
 
 Datadog.configure do |c|
   c.service = 'all-language-ruby'
-  c.env = ENV['DD_ENV'] || 'dev'
-  c.version = ENV['DD_VERSION'] || '1.0'
+  c.env = 'dev'
+  c.version = '1.0'
   c.tracing.instrument :sinatra
-  c.tracing.instrument :net_http
+  c.tracing.instrument :http
 end
 
 PHP_URL = URI('http://all-language-php-lb:80/php')
