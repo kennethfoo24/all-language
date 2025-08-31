@@ -2,7 +2,7 @@
 require 'sinatra'
 require 'net/http'
 require 'uri'
-require 'ddtrace/auto_instrument'
+require 'datadog/auto_instrument'
 
 Datadog.configure do |c|
   c.service = 'all-language-ruby'
