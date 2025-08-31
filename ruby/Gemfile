@@ -5,6 +5,5 @@ gem 'sinatra-contrib'
 gem 'json'
 gem "puma"
 gem "rackup"
-gem 'ddtrace'
-
+gem 'datadog', require: 'datadog/auto_instrument'
 
